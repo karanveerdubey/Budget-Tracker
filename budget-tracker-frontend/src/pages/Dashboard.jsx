@@ -28,6 +28,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import axios from 'axios';
+import VisionUploader from '../components/VisionUploader';
 
 // Chart.js auto-registration for Chart.js v4 + react-chartjs-2 v5
 import 'chart.js/auto';
@@ -53,6 +54,11 @@ const Dashboard = () => {
     const now = new Date();
     const currentMonth = now.getMonth();
     const currentYear = now.getFullYear();
+
+    // values from GPT
+    const [gptDate, setGptDate] = useState('');
+    const [gptAmount, setGptAmount] = useState('');
+    const [gptVendor, setGptVendor] = useState('');
 
     // ------------------------------------------------
     // Fetch user name and data
@@ -116,6 +122,15 @@ const Dashboard = () => {
         setEditingExpense(null);
     };
 
+    const handleReceiptParsed = (parsed) => {
+        // e.g. parsed might be { date: '2023-12-31', vendor: 'Walmart', amount: 42.5 }
+        console.log('Parsed from VisionUploader: ', parsed);
+    
+        // Convert to the fields you want
+        if (parsed.date) setGptDate(parsed.date);
+        if (parsed.amount) setGptAmount(parsed.amount.toString());
+        if (parsed.vendor) setGptVendor(parsed.vendor);
+      };
     const handleDeleteExpense = async (id) => {
         const token = localStorage.getItem('token');
         try {
@@ -191,8 +206,11 @@ const Dashboard = () => {
 
     // Filtered list for display in Expenses + Charts
     const filteredExpenses = useMemo(() => {
-        return expenses.filter(filterByTimeRange);
-    }, [expenses, timeRange]);
+        const filtered = expenses.filter(filterByTimeRange);
+
+  // Sort the filtered expenses by date in descending order (latest first)
+  return filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
+}, [expenses, timeRange]);
 
     // ------------------------------------------------
     // Pie Chart Data (for filtered expenses)
@@ -426,9 +444,20 @@ const Dashboard = () => {
                                 onCancel={() => setEditingExpense(null)}
                             />
                         ) : (
-                            <AddExpenseForm onExpenseAdded={handleExpenseAdded} />
+                            <AddExpenseForm 
+                            key={`${gptDate}-${gptAmount}-${gptVendor}`}
+                            initialDate={gptDate}
+                            initialAmount={gptAmount}
+                            initialDescription={gptVendor}
+                            onExpenseAdded={handleExpenseAdded} />
                         )}
                     </Box>
+                    <Box sx={{ flex: 1 }}>
+            <Typography variant="h6" marginBottom={-3} gutterBottom>
+              OpenAI API
+            </Typography>
+            <VisionUploader onReceiptParsed={handleReceiptParsed}/>
+          </Box>
 
                     {/* Pie Chart (no border, enlarged) */}
                     <Box

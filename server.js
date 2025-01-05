@@ -10,6 +10,7 @@ require('dotenv').config(); // Load environment variables from .env
 const usersRoutes = require('./routes/users');
 const expensesRoutes = require('./routes/expenses');
 const budgetsRoutes = require('./routes/budgets');
+const visionRoute = require('./routes/vision');
 
 // Initialize Express app
 const app = express();
@@ -22,6 +23,7 @@ app.use(bodyParser.json()); // Parse incoming JSON requests
 app.use('/users', usersRoutes); // Users routes
 app.use('/expenses', expensesRoutes); // Expenses routes
 app.use('/budgets', budgetsRoutes); // Budgets routes
+app.use('/api/vision', visionRoute); // open ai api routes
 
 // Test route
 app.get('/', (req, res) => {
