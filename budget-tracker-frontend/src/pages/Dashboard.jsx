@@ -524,7 +524,7 @@ const Dashboard = () => {
                             >
                                 <MenuItem value="7days">Last 7 days</MenuItem>
                                 <MenuItem value="thisMonth">This Month</MenuItem>
-                                <MenuItem value="lastMonth">Last 1 Month</MenuItem>
+                                <MenuItem value="lastMonth">Last Month</MenuItem>
                                 <MenuItem value="all">Show All</MenuItem>
                             </Select>
                             <Button
@@ -616,7 +616,7 @@ const Dashboard = () => {
                     >
                         <MenuItem value="7days">Last 7 days</MenuItem>
                         <MenuItem value="thisMonth">This Month</MenuItem>
-                        <MenuItem value="lastMonth">Last 1 Month</MenuItem>
+                        <MenuItem value="lastMonth">Last Month</MenuItem>
                         <MenuItem value="all">Show All</MenuItem>
                     </Select>
                 </Box>
